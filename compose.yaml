@@ -1,0 +1,43 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3.10.7-alpine
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_USER=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_DATABASE=mongodb
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    ports:
+      - "27017:27017"
+
+
+#  rabbit-producer:
+#    build:
+#      context: ./rabbit-producer
+#    ports:
+#      - "9000:9000"
+#    depends_on:
+#      - rabbitmq
+#
+#
+#  rabbit-consumer:
+#    build:
+#      context: ./rabbit-consumer
+#    ports:
+#      - "9001:9001"
+#    depends_on:
+#      - rabbitmq
+#      - mongodb
+
+
