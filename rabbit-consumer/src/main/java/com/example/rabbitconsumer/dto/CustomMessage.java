@@ -1,12 +1,9 @@
-package com.example.rabbitconsumer.pojo;
+package com.example.rabbitconsumer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Date;
 
@@ -14,12 +11,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Document(collation = "messages")
 public class CustomMessage {
 
-    @MongoId
     private String messageId;
-
     private String message;
     private Date messageDate;
 

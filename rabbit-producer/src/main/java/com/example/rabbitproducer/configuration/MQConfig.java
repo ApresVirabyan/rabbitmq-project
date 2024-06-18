@@ -8,6 +8,9 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.support.DefaultMessagePropertiesConverter;
+import org.springframework.amqp.rabbit.support.MessagePropertiesConverter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,17 +23,31 @@ import org.springframework.context.annotation.Configuration;
 public class MQConfig {
 
     public static final String QUEUE = "message_queue";
+    public static final String QUEUE2 = "message_queue2";
+
     public static final String EXCHANGE = "message_exchange";
+    public static final String EXCHANGE2 = "message_exchange2";
+
     public static final String ROUTING_KEY = "message_routingKey";
+    public static final String ROUTING_KEY2= "message_routingKey2";
 
     @Value("${rabbitmq.queue}")
     private String queueName;
 
+    @Value("${rabbitmq.queue2}")
+    private String queueName2;
+
     @Value("${rabbitmq.exchange}")
     private String exchange;
 
+    @Value("${rabbitmq.exchange2}")
+    private String exchange2;
+
     @Value("${rabbitmq.routingkey}")
     private String routingKey;
+
+    @Value("${rabbitmq.routingkey2}")
+    private String routingKey2;
 
     @Value("${rabbitmq.username}")
     private String username;
@@ -47,8 +64,18 @@ public class MQConfig {
     }
 
     @Bean
+    public Queue queue2(){
+        return new Queue(queueName2, false);
+    }
+
+    @Bean
     public TopicExchange exchange(){
         return new TopicExchange(exchange);
+    }
+
+    @Bean
+    public TopicExchange exchange2(){
+        return new TopicExchange(exchange2);
     }
 
     @Bean
@@ -57,9 +84,13 @@ public class MQConfig {
     }
 
     @Bean
+    public Binding binding2(Queue queue, TopicExchange exchange){
+        return BindingBuilder.bind(queue2()).to(exchange2()).with(routingKey2);
+    }
+
+    @Bean
     public MessageConverter messageConverter() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return  new Jackson2JsonMessageConverter(objectMapper);
+        return  new Jackson2JsonMessageConverter();
     }
 
     @Bean
@@ -72,10 +103,10 @@ public class MQConfig {
     }
 
     @Bean
-    public AmqpTemplate amqpTemplate(){
+    public RabbitTemplate amqpTemplate(){
         CachingConnectionFactory connectionFactory = connectionFactory();
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(messageConverter());
+        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         return rabbitTemplate;
     }
 }

@@ -1,43 +1,70 @@
 version: '3'
 services:
   rabbitmq:
-    image: rabbitmq:3.10.7-alpine
+    image: rabbitmq:3.13-alpine
     hostname: rabbitmq
     restart: always
     environment:
-      - RABBITMQ_DEFAULT_PASS=guest
       - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     ports:
-      - "5672:5672"
-      - "15672:15672"
-
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - rabbitmq-project
 
   mongodb:
-    image: mongo:latest
+    image: mongo:4.1.13
     environment:
-      - MONGO_INITDB_DATABASE=mongodb
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=example
+      MONGO_INITDB_DATABASE: mongodb
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
     ports:
-      - "27017:27017"
-
+      - 27017:27017
+    networks:
+      - rabbitmq-project
 
 #  rabbit-producer:
 #    build:
 #      context: ./rabbit-producer
+#    environment:
+#      QUEUE: message_queue
+#      EXCHANGE: message_exchange
+#      ROUTING_KEY: message_routingKey
+#      RABBITMQ_HOST: "host.docker.internal"
+#      RABBITMQ_address: amqps://guest:guest@localhost:5672
+#      RABBITMQ_PORT: "5672"
+#      RABBITMQ_USERNAME: guest
+#      RABBITMQ_PASSWORD: guest
 #    ports:
 #      - "9000:9000"
-#    depends_on:
-#      - rabbitmq
-#
+#    depends_on: [rabbitmq]
+#    networks:
+#      - rabbitmq-project
 #
 #  rabbit-consumer:
 #    build:
 #      context: ./rabbit-consumer
+#    environment:
+#      - MONGODB_URL=mongodb://root:example@localhost:27017/mongodb?authSource=admin
+#      - QUEUE=message_queue
+#      - EXCHANGE=message_exchange
+#      - ROUTING_KEY=message_routingKey
+#      - RABBITMQ_HOST=host.docker.internal
+#      - RABBITMQ_address amqps://guest:guest@localhost:5672
+#      - RABBITMQ_PORT=5672
+#      - RABBITMQ_USERNAME=guest
+#      - RABBITMQ_PASSWORD=guest
+#
 #    ports:
 #      - "9001:9001"
-#    depends_on:
-#      - rabbitmq
-#      - mongodb
+#    depends_on: [rabbitmq, mongodb]
+#    links:
+#      - rabbitmq:rabbitmq
+#    networks:
+#      - rabbitmq-project
 
+networks:
+  rabbitmq-project:
+    driver: bridge
 
