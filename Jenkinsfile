@@ -2,9 +2,8 @@ pipeline {
     agent any
 
      tools {
-            maven 'Maven' // Укажите имя Maven, настроенное в Global Tool Configuration, или удалите этот блок, если Maven установлен системно
+            maven 'maven' // Укажите имя Maven, настроенное в Global Tool Configuration, или удалите этот блок, если Maven установлен системно
         }
-
 
     stages {
         stage('Checkout') {
@@ -17,9 +16,6 @@ pipeline {
             steps {
                 // Run Maven on a Unix agent.
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
         }
         stage('Test') {
@@ -34,7 +30,7 @@ pipeline {
                 }
                 success {
                     // Archive the jar file if tests succeed
-                    archiveArtifacts 'target/*.jar'
+                    //  archiveArtifacts 'target/*.jar'
                 }
                 failure {
                     // Handle test failures
