@@ -31,6 +31,7 @@ public class MessageService {
                 .stream().map(this::convert)
                 .collect(Collectors.toList());
         log.info("Getting all messages " + messages);
+
         return messages;
     }
 
@@ -39,6 +40,7 @@ public class MessageService {
         customMessage.setMessageId(customMessageEntity.getMessageId());
         customMessage.setMessage(customMessageEntity.getMessage());
         customMessage.setMessageDate(customMessageEntity.getMessageDate());
+
         return customMessage;
     }
 
