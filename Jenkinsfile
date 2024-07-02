@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+     tools {
+            maven 'Maven' // Укажите имя Maven, настроенное в Global Tool Configuration, или удалите этот блок, если Maven установлен системно
+        }
+
+
     stages {
         stage('Checkout') {
             steps {
@@ -25,7 +30,7 @@ pipeline {
             post {
                 always {
                     // Record the test results
-                    junit '**/target/surefire-reports/TEST-*.xml'
+                    junit '**/rabbit-consumer/target/surefire-reports/TEST-*.xml'
                 }
                 success {
                     // Archive the jar file if tests succeed
