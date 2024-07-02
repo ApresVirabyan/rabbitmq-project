@@ -47,6 +47,7 @@ public class MessageService {
         customMessageEntity.setMessageId(customMessage.getMessageId());
         customMessageEntity.setMessage(customMessage.getMessage());
         customMessageEntity.setMessageDate(customMessage.getMessageDate());
+
         return customMessageEntity;
     }
 
