@@ -1,0 +1,19 @@
+pipeline{
+    agent any
+
+    stages{
+        stage('Checkout'){
+           steps{
+               git 'https://github.com/ApresVirabyan/rabbitmq-project.git'
+           }
+        }
+
+        stage('Build'){
+           steps{
+              sh "mvn -Dmaven.test.failure.ignore=true clean package"
+           }
+        }
+    }
+
+
+}
